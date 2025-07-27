@@ -1,6 +1,3 @@
-from utils import Checker
-
-
 def test_001():
     """Test a valid program that should pass all checks"""
     source = """
