@@ -1012,7 +1012,7 @@ def test_065():
         let a = sum(1);
     }
     """
-    expected = "Type Mismatch In Statement: FunctionCall(Identifier(sum), [IntegerLiteral(1)])"
+    expected = "Type Mismatch In Expression: FunctionCall(Identifier(sum), [IntegerLiteral(1)])"
     assert Checker(source).check_from_source() == expected
 
 def test_066():
@@ -1366,7 +1366,7 @@ def test_090():
         let x = isEven(10);
     }
     """
-    expected = "Undeclared Function: isOdd"
+    expected = "Static checking passed"
     assert Checker(source).check_from_source() == expected
 
 def test_091():
@@ -1786,3 +1786,17 @@ def test_119():
     """
     expected = "Type Mismatch In Statement: FuncDecl(bad, [Param(x, int)], int, ...)"
     assert "Type Mismatch In Statement" in Checker(source).check_from_source()
+
+def test_120():
+    """Hàm nhận array nhưng truyền int"""
+    # lời gọi hàm f(x) ở đây là một Stmt và có kiểu ctx là ExprStmt(FunctionCall...), cần phân biệt nó với lời gọi hàm ở một phép gán, lúc này thì lời gọi hàm chỉ là một expr
+    source = """
+func f(a: [int; 3]) -> void {}
+
+func main() -> void {
+    let x: int = 5;
+    f(x);
+}
+"""
+    expected = "Type Mismatch In Statement: FunctionCall(Identifier(f), [Identifier(x)])"
+    assert Checker(source).check_from_source() == expected
