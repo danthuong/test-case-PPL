@@ -1,5 +1,4 @@
 from utils import Checker
-
 def test_000():
     """Pipeline lồng với biểu thức tính toán"""
     source = """
@@ -436,8 +435,8 @@ def test_028():
     source = """
     func classify(x: int) -> string {
         if (x > 0) {
-            if (x < 10) return "small";
-            else return "large";
+            if (x < 10) { return "small"; }
+            else { return "large"; }
         } else {
             return "non-positive";
         }
@@ -982,7 +981,7 @@ def test_063():
     func main() -> void {
         for (i in [1,2,3]) {
             while (true) {
-                if (i > 1) break;
+                if (i > 1) { break; }
             }
         }
     }
@@ -1064,8 +1063,8 @@ def test_069():
     source = """
     func test(x: int) -> int {
         if (x > 0) {
-            if (x > 5) return 1;
-            else return 2;
+            if (x > 5) { return 1; }
+            else { return 2; }
         } else {
             return 0;
         }
@@ -1082,7 +1081,7 @@ def test_070():
     """Nested if-else with return in all paths"""
     source = """
     func grade(score: int) -> string {
-        if (score >= 90) return "A";
+        if (score >= 90) { return "A"; }
         else {
             if (score >= 80) { return "B"; }
             else if (score >= 70) { return "C"; }
@@ -1245,7 +1244,7 @@ def test_082():
         if (x > 0) {
             if (x < 10) {}
             else { return 2; }
-        } else return 0;
+        } else { return 0; }
     }
     func main() -> void {
         let r = choose(5);
@@ -1789,7 +1788,7 @@ def test_119():
 
 def test_120():
     """Hàm nhận array nhưng truyền int"""
-    # lời gọi hàm f(x) ở đây là một Stmt và có kiểu ctx là ExprStmt(FunctionCall...), cần phân biệt nó với lời gọi hàm ở một phép gán, lúc này thì lời gọi hàm chỉ là một expr
+    # lời gọi hàm f(x) ở đây là một Stmt và có kiểu ctx là ExprStmt(FunctionCall...), cần phân biệt nó với lời gọi hàm ở một phép gán, lúc này thì lời gọi hàm sẽ là một expr
     source = """
 func f(a: [int; 3]) -> void {}
 
