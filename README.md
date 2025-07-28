@@ -9,7 +9,7 @@
 ## 📌 Lưu ý
 
 - Kết quả của các test **chỉ mang tính tham khảo**, được xây dựng theo **flow code cá nhân**.
-- Khoảng **70–80% test case** đã được mình **xác nhận với thầy** là hợp lý.
+- Khoảng **70–80% trường hợp trong test case** đã được mình **xác nhận với thầy** là hợp lý.
 - Các test còn lại là những trường hợp **"gây lú"** do **đề bài không rõ ràng** hoặc có khả năng diễn giải khác nhau.
 
 ## 🤝 Đóng góp
