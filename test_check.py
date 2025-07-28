@@ -72,7 +72,7 @@ def test_127():
         MAX = 50;
     }
     """
-    assert Checker(source).check_from_source() == "Type Mismatch In Statement: IdLValue(MAX)"
+    assert Checker(source).check_from_source() == "Type Mismatch In Statement: Assignment(IdLValue(MAX), IntegerLiteral(50))"
 
 def test_128():
     """Test shadowing a constant as a variable"""
@@ -195,7 +195,7 @@ def test_138():
         let result = number["1"];
     }
     """
-    assert Checker(source).check_from_source() == "Type Mismatch In Expression: StringLiteral('1')"
+    assert Checker(source).check_from_source() == "Type Mismatch In Expression: ArrayAccess(Identifier(number), StringLiteral('1'))"
 
 def test_139():
     """Test invalid index - float index"""
@@ -205,7 +205,7 @@ def test_139():
         let result = number[2.3];
     }
     """
-    assert Checker(source).check_from_source() == "Type Mismatch In Expression: FloatLiteral(2.3)"
+    assert Checker(source).check_from_source() == "Type Mismatch In Expression: ArrayAccess(Identifier(number), FloatLiteral(2.3))"
 
 def test_140():
     """Test invalid index - array index"""
@@ -216,7 +216,7 @@ def test_140():
         let result = number[string_];
     }
     """
-    assert Checker(source).check_from_source() == "Type Mismatch In Expression: Identifier(string_)"
+    assert Checker(source).check_from_source() == "Type Mismatch In Expression: ArrayAccess(Identifier(number), Identifier(string_))"
 
 def test_141():
     """Test invalid index - bool index"""
@@ -226,7 +226,7 @@ def test_141():
         let result = number[false];
     }
     """
-    assert Checker(source).check_from_source() == "Type Mismatch In Expression: BooleanLiteral(False)"
+    assert Checker(source).check_from_source() == "Type Mismatch In Expression: ArrayAccess(Identifier(number), BooleanLiteral(False))"
 
 def test_142():
     """Test Binary operation errors - sum = int + bool"""
@@ -446,7 +446,7 @@ def test_162():
         let x = number[number[true]];
     }
     """
-    assert Checker(source).check_from_source() == "Type Mismatch In Expression: BooleanLiteral(True)"
+    assert Checker(source).check_from_source() == "Type Mismatch In Expression: ArrayAccess(Identifier(number), BooleanLiteral(True))"
 
 def test_163():
     """Test Function with undefined return type annotation"""
@@ -700,7 +700,7 @@ def test_183():
         MAX = 37;
     }
     """
-    assert Checker(source).check_from_source() == "Type Mismatch In Statement: IdLValue(MAX)"
+    assert Checker(source).check_from_source() == "Type Mismatch In Statement: Assignment(IdLValue(MAX), IntegerLiteral(37))"
 
 def test_184():
     """Test Return statement errors - bool to int"""
