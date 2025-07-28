@@ -513,7 +513,7 @@ def test_167():
         print(str(len(mixed)));
     }
     """
-    assert Checker(source).check_from_source() == "Type Cannot Be Inferred: ArrayLiteral([FunctionCall(Identifier(getInt), []), FunctionCall(Identifier(getFloat), [])])"
+    assert Checker(source).check_from_source() == "Type Mismatch In Statement: ArrayLiteral([FunctionCall(Identifier(getInt), []), FunctionCall(Identifier(getFloat), [])])"
 
 def test_168():
     """Test Function call without void type"""
