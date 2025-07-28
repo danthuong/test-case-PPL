@@ -195,7 +195,7 @@ def test_138():
         let result = number["1"];
     }
     """
-    assert Checker(source).check_from_source() == "Type Mismatch In Expression: ArrayAccess(Identifier(number), StringLiteral('1'))"
+    assert Checker(source).check_from_source() == "Type Mismatch In Expression: StringLiteral('1')" # Để cái value thoi
 
 def test_139():
     """Test invalid index - float index"""
@@ -205,7 +205,7 @@ def test_139():
         let result = number[2.3];
     }
     """
-    assert Checker(source).check_from_source() == "Type Mismatch In Expression: ArrayAccess(Identifier(number), FloatLiteral(2.3))"
+    assert Checker(source).check_from_source() == "Type Mismatch In Expression: FloatLiteral(2.3)"
 
 def test_140():
     """Test invalid index - array index"""
@@ -216,7 +216,7 @@ def test_140():
         let result = number[string_];
     }
     """
-    assert Checker(source).check_from_source() == "Type Mismatch In Expression: ArrayAccess(Identifier(number), Identifier(string_))"
+    assert Checker(source).check_from_source() == "Type Mismatch In Expression: Identifier(string_)"
 
 def test_141():
     """Test invalid index - bool index"""
@@ -226,7 +226,7 @@ def test_141():
         let result = number[false];
     }
     """
-    assert Checker(source).check_from_source() == "Type Mismatch In Expression: ArrayAccess(Identifier(number), BooleanLiteral(False))"
+    assert Checker(source).check_from_source() == "Type Mismatch In Expression: BooleanLiteral(False)"
 
 def test_142():
     """Test Binary operation errors - sum = int + bool"""
@@ -446,7 +446,7 @@ def test_162():
         let x = number[number[true]];
     }
     """
-    assert Checker(source).check_from_source() == "Type Mismatch In Expression: ArrayAccess(Identifier(number), BooleanLiteral(True))"
+    assert Checker(source).check_from_source() == "Type Mismatch In Expression: BooleanLiteral(True)"
 
 def test_163():
     """Test Function with undefined return type annotation"""
@@ -513,7 +513,8 @@ def test_167():
         print(str(len(mixed)));
     }
     """
-    assert Checker(source).check_from_source() == "Type Mismatch In Statement: ArrayLiteral([FunctionCall(Identifier(getInt), []), FunctionCall(Identifier(getFloat), [])])"
+    # cái này hơi confuse, cứ follow 1 người rồi hỏi lại thầy chỉnh sau
+    assert Checker(source).check_from_source() == "Type Mismatch In Expression: ArrayLiteral([FunctionCall(Identifier(getInt), []), FunctionCall(Identifier(getFloat), [])])"
 
 def test_168():
     """Test Function call without void type"""
@@ -582,7 +583,8 @@ def test_172():
         }
     }
     """
-    assert Checker(source).check_from_source() == "Type Mismatch In Statement: IfStmt(condition=BinaryOp(Identifier(x), &&, BinaryOp(Identifier(y), >, IntegerLiteral(5))), then_stmt=BlockStmt([Assignment(IdLValue(x), StringLiteral('1'))]))"
+    # cái này cũng confuse, hỏi thầy sau
+    assert Checker(source).check_from_source() == "Type Mismatch In Expression: BinaryOp(Identifier(x), &&, BinaryOp(Identifier(y), >, IntegerLiteral(5)))"
 
 def test_173():
     """Test Loop statement errors - int condition"""
@@ -817,7 +819,7 @@ def test_192():
         let x = 3 >> add(1,2);
     }
     """
-    assert Checker(source).check_from_source() == "Type Mismatch In Expression: FunctionCall(Identifier(add), [IntegerLiteral(1), IntegerLiteral(2)])"
+    assert Checker(source).check_from_source() == "Type Mismatch In Expression: BinaryOp(IntegerLiteral(3), >>, FunctionCall(Identifier(add), [IntegerLiteral(1), IntegerLiteral(2)]))"
 
 def test_193():
     """Test Complex type mismatch errors - different element types"""
@@ -865,7 +867,8 @@ def test_196():
         matrix[3.14][0] = 0;
     }
     """
-    assert Checker(source).check_from_source() == "Type Mismatch In Statement: ArrayAccess(Identifier(matrix), FloatLiteral(3.14))"
+    # statement hay expr gì cũng được, dựa theo mục số 9 trong spec và mục số 3 thì chắc là nên chọn Expr
+    assert Checker(source).check_from_source() == "Type Mismatch In Expression: FloatLiteral(3.14)"
 
 def test_197():
     """Test Complex type mismatch errors - float column index"""
@@ -877,7 +880,8 @@ def test_197():
         matrix[0][3.14] = 0;
     }
     """
-    assert Checker(source).check_from_source() == "Type Mismatch In Statement: Assignment(ArrayAccessLValue(ArrayAccess(Identifier(matrix), IntegerLiteral(0)), FloatLiteral(3.14)), IntegerLiteral(0))"
+    # Cũng giống cái trên nhưng chỉ lấy số cho đồng nhất
+    assert Checker(source).check_from_source() == "Type Mismatch In Expression: FloatLiteral(3.14)"
 
 def test_198():
     """Test Array size mismatch - large to small"""
@@ -1303,7 +1307,8 @@ def test_228():
         let intArray: [int; 3] = [1, 2.5, 3]; 
     }
     """
-    assert Checker(source).check_from_source() == "Type Mismatch In Statement: ArrayLiteral([IntegerLiteral(1), FloatLiteral(2.5), IntegerLiteral(3)])"
+    # Tương tự
+    assert Checker(source).check_from_source() == "Type Mismatch In Expression: ArrayLiteral([IntegerLiteral(1), FloatLiteral(2.5), IntegerLiteral(3)])"
 
 def test_229():
     """Test array_literal size"""
