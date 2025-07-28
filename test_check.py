@@ -141,7 +141,7 @@ def test_134():
     """Test using a function before declaration"""
     source = """
     func main() -> void {  
-        foo()
+        foo();
         func foo() -> void {return;}
     }
     """
@@ -451,12 +451,12 @@ def test_162():
 def test_163():
     """Test Function with undefined return type annotation"""
     source = """   
-    func noReturn() -> type {let x = 5;} 
+    func noReturn() -> int {let x = 5;} 
     func main() -> void {  
         noReturn();
     }
     """
-    assert Checker(source).check_from_source() == "Type Cannot Be Inferred: FuncDecl(noReturn, [], None, [VarDecl(x, IntegerLiteral(5))])"
+    assert Checker(source).check_from_source() == "Type Mismatch In Statement: FuncDecl(noReturn, [], int, [VarDecl(x, IntegerLiteral(5))])"
 
 def test_164():
     """Test Empty array without type annotation"""
@@ -483,19 +483,15 @@ def test_165():
 def test_166():
     """Test Complex expression without sufficient context"""
     source = """   
-    func print(s: string) -> string {
-        return s;
-    }
-    
-    func type_list() -> type { 
+    func type_list() -> bool { 
         let typ = Circle;
+        return true;
     }
     func main() -> void {  
         let typ = type_list();
-        print(str(typ));
     }
     """
-    assert Checker(source).check_from_source() == "Type Cannot Be Inferred: FuncDecl(type_list, [], None, [VarDecl(typ, Identifier(Circle))])"
+    assert Checker(source).check_from_source() == "Undeclared Identifier: Circle"
 
 def test_167():
     """Test Mixed array elements without clear type"""
@@ -828,7 +824,7 @@ def test_193():
     source = """   
     func main() -> void {
         let matrix: [[int; 2]; 2] = [[1, 2], [3, 4]];
-        let floatMatrix: [[float; 2]; 2] = [[1.0, 2.0], [3.0, 4.0]]
+        let floatMatrix: [[float; 2]; 2] = [[1.0, 2.0], [3.0, 4.0]];
         
         matrix = floatMatrix;
     }
@@ -840,7 +836,7 @@ def test_194():
     source = """   
     func main() -> void {
         let matrix: [[int; 2]; 2] = [[1, 2], [3, 4]];
-        let floatMatrix: [[float; 2]; 2] = [[1.0, 2.0], [3.0, 4.0]]
+        let floatMatrix: [[float; 2]; 2] = [[1.0, 2.0], [3.0, 4.0]];
         
         matrix[0] = [1.0, 2.0];
     }
@@ -852,7 +848,7 @@ def test_195():
     source = """   
     func main() -> void {
         let matrix: [[int; 2]; 2] = [[1, 2], [3, 4]];
-        let floatMatrix: [[float; 2]; 2] = [[1.0, 2.0], [3.0, 4.0]]
+        let floatMatrix: [[float; 2]; 2] = [[1.0, 2.0], [3.0, 4.0]];
         
         matrix[0][0] = 3.14;
     }
@@ -864,7 +860,7 @@ def test_196():
     source = """   
     func main() -> void {
         let matrix: [[int; 2]; 2] = [[1, 2], [3, 4]];
-        let floatMatrix: [[float; 2]; 2] = [[1.0, 2.0], [3.0, 4.0]]
+        let floatMatrix: [[float; 2]; 2] = [[1.0, 2.0], [3.0, 4.0]];
         
         matrix[3.14][0] = 0;
     }
@@ -876,7 +872,7 @@ def test_197():
     source = """   
     func main() -> void {
         let matrix: [[int; 2]; 2] = [[1, 2], [3, 4]];
-        let floatMatrix: [[float; 2]; 2] = [[1.0, 2.0], [3.0, 4.0]]
+        let floatMatrix: [[float; 2]; 2] = [[1.0, 2.0], [3.0, 4.0]];
         
         matrix[0][3.14] = 0;
     }
@@ -1322,7 +1318,7 @@ def test_230():
     """Test array return type errors"""
     source = """
     func getFloatArray() -> [float; 3] {
-        return [1.0, 2.0, 3.0]
+        return [1.0, 2.0, 3.0];
     }
     func main() -> void {
         let result1: [int; 3] = getFloatArray();
@@ -1361,7 +1357,7 @@ def test_233():
         let matrix: [[int; 2]; 3] = [[1, 2], [3, 4], [5, 6]];
         let floatMatrix: [[float; 2]; 3] = [[1.0, 2.0], [3.0, 4.0], [5.0, 6.0]];
         
-        matrix = floatMatrix
+        matrix = floatMatrix;
     }
     """
     assert Checker(source).check_from_source() == "Type Mismatch In Statement: Assignment(IdLValue(matrix), Identifier(floatMatrix))"
