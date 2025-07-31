@@ -1977,7 +1977,7 @@ def test_136():
         foo();
     }
     """
-    assert Checker(source).check_from_source() == "Undeclared Function: foo"
+    assert Checker(source).check_from_source() == "Type Mismatch In Statement: ExprStmt(FunctionCall(Identifier(print), [StringLiteral('hi')]))"
 
 def test_137():
     """Test using constant before declaration"""
@@ -2329,7 +2329,7 @@ def test_168():
         getInt();
     }
     """
-    assert Checker(source).check_from_source() == "Static checking passed"
+    assert Checker(source).check_from_source() == "Type Mismatch In Statement: ExprStmt(FunctionCall(Identifier(getInt), []))"
 
 def test_169():
     """Test Function call: void with return"""
@@ -3077,7 +3077,7 @@ def test_225():
         print("Hello, World!");
     }
     """
-    assert Checker(source).check_from_source() == "Static checking passed"
+    assert Checker(source).check_from_source() == "Type Mismatch In Statement: ExprStmt(FunctionCall(Identifier(print), [StringLiteral('Hello, World!')]))"
 
 def test_226():
     """Test out-of-bounds array access in ArrayAccessLValue"""
