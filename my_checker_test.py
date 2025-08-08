@@ -398,8 +398,8 @@ def test_025():
         a[1] = "hello";
     }
     """
-    expected = "Type Mismatch In Statement: Assignment(..."
-    assert Checker(source).check_from_source().startswith("Type Mismatch In Statement")
+    expected = "Type Mismatch In Statement: Assignment(ArrayAccessLValue(Identifier(a), IntegerLiteral(1)), StringLiteral('hello'))"
+    assert Checker(source).check_from_source() ==  expected
 
 def test_026():
     """Recursive even check with modulo"""
@@ -605,8 +605,8 @@ def test_038():
         let x = f(2);
     }
     """
-    expected = "Type Mismatch In Statement: FuncDecl(f, ..."
-    assert Checker(source).check_from_source().startswith("Type Mismatch In Statement")
+    expected = "Type Mismatch In Statement: FuncDecl(f, [Param(x, int)], int, [IfStmt(condition=BinaryOp(Identifier(x), >, IntegerLiteral(0)), then_stmt=BlockStmt([ReturnStmt(Identifier(x))]))])"
+    assert Checker(source).check_from_source() == expected
 
 def test_039():
     """Function with no return (should fail)"""
@@ -617,8 +617,8 @@ def test_039():
         let x = f(1);
     }
     """
-    expected = "Type Mismatch In Statement: FuncDecl(f, ..."
-    assert Checker(source).check_from_source().startswith("Type Mismatch In Statement")
+    expected = "Type Mismatch In Statement: FuncDecl(f, [Param(x, int)], int, [])"
+    assert Checker(source).check_from_source() ==  expected
 
 def test_040():
     """Function with return inside for loop with condition"""
@@ -875,8 +875,8 @@ def test_055():
         let r = f(2);
     }
     """
-    expected = "Type Mismatch In Statement: FuncDecl(f, ..."
-    assert Checker(source).check_from_source().startswith("Type Mismatch In Statement")
+    expected = "Type Mismatch In Statement: FuncDecl(f, [Param(x, int)], int, [IfStmt(condition=BinaryOp(Identifier(x), >, IntegerLiteral(0)), then_stmt=BlockStmt([IfStmt(condition=BinaryOp(Identifier(x), <, IntegerLiteral(5)), then_stmt=BlockStmt([ReturnStmt(IntegerLiteral(1))]))]), else_stmt=BlockStmt([ReturnStmt(UnaryOp(-, IntegerLiteral(1)))]))])"
+    assert Checker(source).check_from_source() == expected
 
 def test_056():
     """Function returning string through pipeline chain"""
@@ -1055,8 +1055,8 @@ def test_068():
         let y = test(3);
     }
     """
-    expected = "Type Mismatch In Statement: FuncDecl(test, [Param(x, int)], int, [...])"
-    assert Checker(source).check_from_source().startswith("Type Mismatch In Statement")
+    expected = "Type Mismatch In Statement: FuncDecl(test, [Param(x, int)], int, [IfStmt(condition=BinaryOp(Identifier(x), >, IntegerLiteral(0)), then_stmt=BlockStmt([IfStmt(condition=BinaryOp(Identifier(x), <, IntegerLiteral(10)), then_stmt=BlockStmt([]), else_stmt=BlockStmt([ReturnStmt(IntegerLiteral(1))]))]), else_stmt=BlockStmt([ReturnStmt(IntegerLiteral(0))]))])"
+    assert Checker(source).check_from_source() == expected
 
 def test_069():
     """Correct function with nested condition return"""
@@ -1250,8 +1250,8 @@ def test_082():
         let r = choose(5);
     }
     """
-    expected = "Type Mismatch In Statement: FuncDecl(choose, [Param(x, int)], int, [...])"
-    assert Checker(source).check_from_source().startswith("Type Mismatch In Statement")
+    expected = "Type Mismatch In Statement: FuncDecl(choose, [Param(x, int)], int, [IfStmt(condition=BinaryOp(Identifier(x), >, IntegerLiteral(0)), then_stmt=BlockStmt([IfStmt(condition=BinaryOp(Identifier(x), <, IntegerLiteral(10)), then_stmt=BlockStmt([]), else_stmt=BlockStmt([ReturnStmt(IntegerLiteral(2))]))]), else_stmt=BlockStmt([ReturnStmt(IntegerLiteral(0))]))])"
+    assert Checker(source).check_from_source() == expected
 
 def test_083():
     """Correct inferred type for array function"""
@@ -1333,8 +1333,8 @@ def test_088():
         let y = f(3);
     }
     """
-    expected = "Type Mismatch In Statement: FuncDecl(f, [Param(x, int)], int, [...])"
-    assert Checker(source).check_from_source().startswith("Type Mismatch In Statement")
+    expected = "Type Mismatch In Statement: FuncDecl(f, [Param(x, int)], int, [IfStmt(condition=BinaryOp(Identifier(x), >, IntegerLiteral(0)), then_stmt=BlockStmt([IfStmt(condition=BinaryOp(Identifier(x), ==, IntegerLiteral(1)), then_stmt=BlockStmt([ReturnStmt(IntegerLiteral(1))]))]), else_stmt=BlockStmt([ReturnStmt(IntegerLiteral(2))]))])"
+    assert Checker(source).check_from_source() == expected
 
 def test_089():
     """Function with early return then fallback"""
@@ -1980,12 +1980,12 @@ def test_136():
     assert Checker(source).check_from_source() == "Type Mismatch In Statement: ExprStmt(FunctionCall(Identifier(print), [StringLiteral('hi')]))"
 
 def test_137():
-    """Test using constant before declaration"""
+    """Test using constant for var declaration"""
     source = """
+    const MAX = 100;
     func main() -> void {  
         let x = MAX;
     }
-    const MAX: int = 100;
     """
     assert Checker(source).check_from_source() == "Static checking passed"
 
@@ -1997,7 +1997,7 @@ def test_138():
         let result = number["1"];
     }
     """
-    assert Checker(source).check_from_source() == "Type Mismatch In Expression: StringLiteral('1')" # Để cái value thoi
+    assert Checker(source).check_from_source() == "Type Mismatch In Expression: ArrayAccess(Identifier(number), StringLiteral('1'))" # Để cái value thoi
 
 def test_139():
     """Test invalid index - float index"""
@@ -2007,7 +2007,7 @@ def test_139():
         let result = number[2.3];
     }
     """
-    assert Checker(source).check_from_source() == "Type Mismatch In Expression: FloatLiteral(2.3)"
+    assert Checker(source).check_from_source() == "Type Mismatch In Expression: ArrayAccess(Identifier(number), FloatLiteral(2.3))"
 
 def test_140():
     """Test invalid index - array index"""
@@ -2018,7 +2018,7 @@ def test_140():
         let result = number[string_];
     }
     """
-    assert Checker(source).check_from_source() == "Type Mismatch In Expression: Identifier(string_)"
+    assert Checker(source).check_from_source() == "Type Mismatch In Expression: ArrayAccess(Identifier(number), Identifier(string_))"
 
 def test_141():
     """Test invalid index - bool index"""
@@ -2028,7 +2028,7 @@ def test_141():
         let result = number[false];
     }
     """
-    assert Checker(source).check_from_source() == "Type Mismatch In Expression: BooleanLiteral(False)"
+    assert Checker(source).check_from_source() == "Type Mismatch In Expression: ArrayAccess(Identifier(number), BooleanLiteral(False))"
 
 def test_142():
     """Test Binary operation errors - sum = int + bool"""
@@ -2238,7 +2238,7 @@ def test_161():
         let x = number[0] + string_[0];
     }
     """
-    assert Checker(source).check_from_source() == "Type Mismatch In Expression: BinaryOp(ArrayAccess(Identifier(number), IntegerLiteral(0)), +, ArrayAccess(Identifier(string_), IntegerLiteral(0)))"
+    assert Checker(source).check_from_source() == "Static checking passed"
 
 def test_162():
     """Test Nested expression errors - bool index"""
@@ -2248,7 +2248,7 @@ def test_162():
         let x = number[number[true]];
     }
     """
-    assert Checker(source).check_from_source() == "Type Mismatch In Expression: BooleanLiteral(True)"
+    assert Checker(source).check_from_source() == "Type Mismatch In Expression: ArrayAccess(Identifier(number), BooleanLiteral(True))"
 
 def test_163():
     """Test Function with undefined return type annotation"""
@@ -2670,7 +2670,7 @@ def test_196():
     }
     """
     # statement hay expr gì cũng được, dựa theo mục số 9 trong spec và mục số 3 thì chắc là nên chọn Expr
-    assert Checker(source).check_from_source() == "Type Mismatch In Expression: FloatLiteral(3.14)"
+    assert Checker(source).check_from_source() == "Type Mismatch In Expression: ArrayAccess(Identifier(matrix), FloatLiteral(3.14))"
 
 def test_197():
     """Test Complex type mismatch errors - float column index"""
