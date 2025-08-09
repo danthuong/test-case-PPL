@@ -2083,7 +2083,7 @@ def test_146():
         let comparision = x > y;
     }
     """
-    assert Checker(source).check_from_source() == "Static checking passed"
+    assert Checker(source).check_from_source() == "Type Mismatch In Expression: BinaryOp(Identifier(x), >, Identifier(y))"
 
 def test_147():
     """Test Binary operation errors - equality: int vs float"""
