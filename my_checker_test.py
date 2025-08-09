@@ -2669,7 +2669,6 @@ def test_196():
         matrix[3.14][0] = 0;
     }
     """
-    # statement hay expr gì cũng được, dựa theo mục số 9 trong spec và mục số 3 thì chắc là nên chọn Expr
     assert Checker(source).check_from_source() == "Type Mismatch In Expression: ArrayAccess(Identifier(matrix), FloatLiteral(3.14))"
 
 def test_197():
