@@ -2682,8 +2682,7 @@ def test_197():
         matrix[0][3.14] = 0;
     }
     """
-    # Cũng giống cái trên nhưng chỉ lấy số cho đồng nhất
-    assert Checker(source).check_from_source() == "Type Mismatch In Expression: FloatLiteral(3.14)"
+    assert Checker(source).check_from_source() == "Type Mismatch In Expression: Assignment(ArrayAccessLValue(ArrayAccess(Identifier(matrix), IntegerLiteral(0)), FloatLiteral(3.14)), IntegerLiteral(0))"
 
 def test_198():
     """Test Array size mismatch - large to small"""
