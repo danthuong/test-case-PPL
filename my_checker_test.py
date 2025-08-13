@@ -107,7 +107,7 @@ def test_006():
         let PI: int = 10;
     }
     """
-    expected = "Static checking passed"
+    expected = "Redeclared Variable: PI"
     assert Checker(source).check_from_source() == expected
 
 def test_007():
@@ -1275,7 +1275,7 @@ def test_084():
         let x = a[5];
     }
     """
-    expected = "Type Mismatch In Statement: ArrayAccess(Identifier(a), IntegerLiteral(5))"
+    expected = "Type Mismatch In Expression: ArrayAccess(Identifier(a), IntegerLiteral(5))"
     assert Checker(source).check_from_source() == expected  # Assuming runtime check
 
 def test_085():
@@ -1408,7 +1408,7 @@ def test_093():
         }
     }
     """
-    expected = "Static checking passed"
+    expected = "Redeclared Variable: printVal"
     assert Checker(source).check_from_source() == expected
 
 def test_094():
@@ -1884,7 +1884,7 @@ def test_128():
         let MAX = 13;
     }
     """
-    assert Checker(source).check_from_source() == "Static checking passed"
+    assert Checker(source).check_from_source() == "Redeclared Variable: MAX"
 
 def test_129():
     """Test Redeclared Parameter"""
@@ -3085,7 +3085,7 @@ def test_226():
         numbers[10] = 0;
     }
     """
-    assert Checker(source).check_from_source() == "Type Mismatch In Statement: Assignment(ArrayAccessLValue(Identifier(numbers), IntegerLiteral(10)), IntegerLiteral(0))"
+    assert Checker(source).check_from_source() == "Type Mismatch In Expression: ArrayAccessLValue(Identifier(numbers), IntegerLiteral(10))"
 
 def test_227():
     """Test valid array operations"""
@@ -3166,3 +3166,4 @@ def test_233():
     }
     """
     assert Checker(source).check_from_source() == "Type Mismatch In Statement: Assignment(IdLValue(matrix), Identifier(floatMatrix))"
+
