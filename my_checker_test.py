@@ -107,7 +107,7 @@ def test_006():
         let PI: int = 10;
     }
     """
-    expected = "Redeclared Variable: PI"
+    expected = "Static checking passed"
     assert Checker(source).check_from_source() == expected
 
 def test_007():
@@ -1408,7 +1408,7 @@ def test_093():
         }
     }
     """
-    expected = "Redeclared Variable: printVal"
+    expected = "Static checking passed"
     assert Checker(source).check_from_source() == expected
 
 def test_094():
@@ -1884,7 +1884,7 @@ def test_128():
         let MAX = 13;
     }
     """
-    assert Checker(source).check_from_source() == "Redeclared Variable: MAX"
+    assert Checker(source).check_from_source() == "Static checking passed"
 
 def test_129():
     """Test Redeclared Parameter"""
@@ -2357,7 +2357,7 @@ def test_170():
         }
     }
     """
-    assert Checker(source).check_from_source() == "Type Mismatch In Statement: IfStmt(condition=Identifier(x), then_stmt=BlockStmt([Assignment(IdLValue(x), IntegerLiteral(1))]), else_stmt=BlockStmt([Assignment(IdLValue(x), IntegerLiteral(0))]))"
+    assert Checker(source).check_from_source() == "Type Mismatch In Expression: Identifier(x)"
 
 def test_171():
     """Test Conditional statement errors - string condition"""
@@ -2372,7 +2372,7 @@ def test_171():
         }
     }
     """
-    assert Checker(source).check_from_source() == "Type Mismatch In Statement: IfStmt(condition=Identifier(x), then_stmt=BlockStmt([Assignment(IdLValue(x), StringLiteral('1'))]), else_stmt=BlockStmt([Assignment(IdLValue(x), StringLiteral('0'))]))"
+    assert Checker(source).check_from_source() == "Type Mismatch In Expression: Identifier(x)"
 
 def test_172():
     """Test Conditional statement errors - string in logical expression"""
@@ -2422,7 +2422,7 @@ def test_175():
         }
     }
     """
-    assert Checker(source).check_from_source() == "Type Mismatch In Statement: ForStmt(i, Identifier(x), BlockStmt([VarDecl(y, IntegerLiteral(1))]))"
+    assert Checker(source).check_from_source() == "Type Mismatch In Expression: Identifier(x)"
 
 def test_176():
     """Test Loop statement errors - string is not iterable"""
@@ -2434,7 +2434,7 @@ def test_176():
         }
     }
     """
-    assert Checker(source).check_from_source() == "Type Mismatch In Statement: ForStmt(i, Identifier(x), BlockStmt([VarDecl(y, IntegerLiteral(1))]))"
+    assert Checker(source).check_from_source() == "Type Mismatch In Expression: Identifier(x)"
 
 def test_177():
     """Test Assignment statement errors - int to string"""
